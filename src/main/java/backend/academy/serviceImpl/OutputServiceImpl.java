@@ -21,10 +21,11 @@ public class OutputServiceImpl implements OutputService {
         Cell[][] grid = maze.grid();
         for (int y = 0; y < grid.length; y++) {
             for (int x = 0; x < grid[y].length; x++) {
-                if (grid[y][x].type() == CellType.WALL) {
-                    System.out.print("██");
-                } else {
-                    System.out.print("  ");
+                switch (grid[y][x].type()) {
+                    case WALL -> System.out.print("██");
+                    case PASSAGE -> System.out.print("  ");
+                    case VISITED -> System.out.print("••");
+                    case PATH -> System.out.print("░░");
                 }
             }
             System.out.println();
