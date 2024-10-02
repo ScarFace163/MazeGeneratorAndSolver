@@ -1,37 +1,34 @@
 package backend.academy.solver;
 
 import backend.academy.enums.CellType;
-import backend.academy.model.Maze;
 import backend.academy.model.Cell;
+import backend.academy.model.Maze;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class BFSSolver implements Solver {
-    public BFSSolver() {
-
-    }
+    private int visitedCellsCount;
+    private int passagesCount;
 
     @Override
     public boolean solve(Maze maze) {
         int height = maze.height();
         int width = maze.width();
         Cell[][] grid = maze.grid();
-        Cell start = grid[1][0];
-        Cell end = grid[height - 2][width - 1];
         boolean[][] visited = new boolean[height][width];
         Cell[][] parent = new Cell[height][width];
 
         Queue<Cell> queue = new LinkedList<>();
-        queue.add(start);
-        visited[start.y()][start.x()] = true;
+        queue.add(grid[1][0]);
+        visited[1][0] = true;
+        visitedCellsCount = 1;
+        passagesCount = countPassages(grid);
 
         while (!queue.isEmpty()) {
             Cell current = queue.poll();
-            if (current.equals(end)) {
+            if (current.equals(grid[height - 2][width - 2])) {
                 markPath(parent, current);
+                updateMazeStats(maze);
                 return true;
             }
 
@@ -41,10 +38,30 @@ public class BFSSolver implements Solver {
                     visited[neighbor.y()][neighbor.x()] = true;
                     neighbor.type(CellType.VISITED);
                     parent[neighbor.y()][neighbor.x()] = current;
+                    visitedCellsCount++;
                 }
             }
         }
+        updateMazeStats(maze);
         return false;
+    }
+
+    private void updateMazeStats(Maze maze) {
+        maze.visitedCellsCount(visitedCellsCount);
+        maze.passageCellsCount(passagesCount);
+        maze.percentageOfVisitedCells((int) ((double) visitedCellsCount / passagesCount * 100));
+    }
+
+    private int countPassages(Cell[][] grid) {
+        int count = 0;
+        for (Cell[] row : grid) {
+            for (Cell cell : row) {
+                if (cell.type() == CellType.PASSAGE) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     private void markPath(Cell[][] parent, Cell end) {
