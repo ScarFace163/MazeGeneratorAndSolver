@@ -7,11 +7,13 @@ import backend.academy.model.Maze;
 import java.util.*;
 
 public class AStarSolver implements Solver {
+    private int visitedCellsCount;
+    private int passagesCount;
 
     private static class Node implements Comparable<Node> {
         Cell cell;
         Node parent;
-        int g; // Cost f
+        int g; // Cost from start to this node
         int h; // Heuristic cost to the end
 
         Node(Cell cell, Node parent, int g, int h) {
@@ -40,11 +42,14 @@ public class AStarSolver implements Solver {
         Set<Cell> closedList = new HashSet<>();
 
         openList.add(new Node(start, null, 0, heuristic(start, end)));
+        visitedCellsCount = 0;
+        passagesCount = countPassages(maze.grid());
 
         while (!openList.isEmpty()) {
             Node current = openList.poll();
             if (current.cell.equals(end)) {
                 markPath(current);
+                updateMazeStats(maze);
                 return true;
             }
 
@@ -64,9 +69,29 @@ public class AStarSolver implements Solver {
 
                 openList.add(neighborNode);
                 neighbor.type(CellType.VISITED);
+                visitedCellsCount++;
             }
         }
+        updateMazeStats(maze);
         return false;
+    }
+
+    private void updateMazeStats(Maze maze) {
+        maze.visitedCellsCount(visitedCellsCount);
+        maze.passageCellsCount(passagesCount);
+        maze.percentageOfVisitedCells((int) ((double) visitedCellsCount / passagesCount * 100));
+    }
+
+    private int countPassages(Cell[][] grid) {
+        int count = 0;
+        for (Cell[] row : grid) {
+            for (Cell cell : row) {
+                if (cell.type() == CellType.PASSAGE) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     private int heuristic(Cell a, Cell b) {
