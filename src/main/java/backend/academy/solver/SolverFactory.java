@@ -9,6 +9,8 @@ public class SolverFactory {
         switch (type){
             case SolverType.BFS:
                 return new BFSSolver();
+            case SolverType.ASTAR:
+                return new AStarSolver();
             default:
                 log.info("No such solver type");
         }
