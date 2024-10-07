@@ -4,13 +4,13 @@ import backend.academy.enums.SolverType;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class SolverFactory {
-    public static Solver getSolver(SolverType type) {
+public class SolverStrategyFactory {
+    public static SolverStrategy getSolver(SolverType type) {
         switch (type){
             case SolverType.BFS:
-                return new BFSSolver();
+                return new BFSSolverStrategy();
             case SolverType.ASTAR:
-                return new AStarSolver();
+                return new AStarSolverStrategy();
             default:
                 log.info("No such solver type");
         }

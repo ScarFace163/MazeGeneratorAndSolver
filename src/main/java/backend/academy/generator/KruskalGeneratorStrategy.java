@@ -3,16 +3,13 @@ package backend.academy.generator;
 import backend.academy.enums.CellType;
 import backend.academy.model.Maze;
 import backend.academy.model.Cell;
-import org.apache.commons.collections.list.AbstractLinkedList;
-import org.checkerframework.checker.units.qual.C;
 
-import java.lang.instrument.ClassDefinition;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class KruskalGenerator implements Generator {
+public class KruskalGeneratorStrategy implements GeneratorStrategy {
     private static final Random RANDOM = new Random();
 
     @Override

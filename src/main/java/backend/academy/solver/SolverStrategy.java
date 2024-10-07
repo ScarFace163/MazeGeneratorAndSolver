@@ -2,6 +2,6 @@ package backend.academy.solver;
 
 import backend.academy.model.Maze;
 
-public interface Solver {
+public interface SolverStrategy {
     boolean solve(Maze maze);
 }

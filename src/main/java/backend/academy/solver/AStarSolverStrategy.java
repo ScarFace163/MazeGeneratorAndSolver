@@ -6,7 +6,7 @@ import backend.academy.model.Maze;
 
 import java.util.*;
 
-public class AStarSolver implements Solver {
+public class AStarSolverStrategy implements SolverStrategy {
     private int visitedCellsCount;
     private int passagesCount;
 
