@@ -1,6 +1,6 @@
 package backend.academy.enums;
 
-public enum SolverType {
+public enum SolverStrategyType {
     BFS,
     ASTAR
 }
