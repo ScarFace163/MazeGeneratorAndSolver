@@ -18,19 +18,29 @@ public class KruskalGeneratorStrategy implements GeneratorStrategy {
         List<Edge> edges = new ArrayList<>();
         UnionFind uf = new UnionFind(width * height);
         initializeMaze(height, width, grid);
-        initializeEdges(height,width,edges);
-        generateMaze(edges,uf,width,grid);
-        return new Maze(height, width, grid);
+        initializeEdges(height, width, edges);
+        generateMaze(edges, uf, width, grid);
+
+        // Set the start and finish points on the boundary
+        // Set the start and finish points on the boundary
+        Cell start = getValidBoundaryCell(grid, height, width);
+        Cell finish = getValidBoundaryCell(grid, height, width);
+
+        Maze maze = new Maze(height, width, grid);
+        maze.start(start);
+        maze.end(finish);
+
+        return maze;
     }
+
     private void initializeMaze(int height, int width, Cell[][] maze) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                maze[y][x] = new Cell(x,y,CellType.WALL); // Стена
+                maze[y][x] = new Cell(x, y, CellType.WALL); // Стена
             }
         }
-        maze[1][0].type(CellType.PASSAGE);
-        maze[height - 2][width - 1].type(CellType.PASSAGE);
     }
+
     private void initializeEdges(int height, int width, List<Edge> edges) {
         for (int y = 1; y < height; y += 2) {
             for (int x = 1; x < width; x += 2) {
@@ -40,7 +50,8 @@ public class KruskalGeneratorStrategy implements GeneratorStrategy {
         }
         Collections.shuffle(edges);
     }
-    public void generateMaze(List<Edge> edges, UnionFind uf , int width , Cell[][] maze) {
+
+    public void generateMaze(List<Edge> edges, UnionFind uf, int width, Cell[][] maze) {
         for (Edge edge : edges) {
             int cell1 = edge.cell1;
             int cell2 = edge.cell2;
@@ -55,6 +66,30 @@ public class KruskalGeneratorStrategy implements GeneratorStrategy {
                 maze[(y1 + y2) / 2][(x1 + x2) / 2].type(CellType.PASSAGE);
             }
         }
+    }
+
+    private int[] getRandomBoundaryCell(int height, int width) {
+        int side = RANDOM.nextInt(4);
+        int x = 0, y = 0;
+        switch (side) {
+            case 0: // Top
+                x = RANDOM.nextInt(width);
+                y = 0;
+                break;
+            case 1: // Bottom
+                x = RANDOM.nextInt(width);
+                y = height - 1;
+                break;
+            case 2: // Left
+                x = 0;
+                y = RANDOM.nextInt(height);
+                break;
+            case 3: // Right
+                x = width - 1;
+                y = RANDOM.nextInt(height);
+                break;
+        }
+        return new int[]{x, y};
     }
 
     private static class Edge {
@@ -100,5 +135,23 @@ public class KruskalGeneratorStrategy implements GeneratorStrategy {
                 }
             }
         }
+    }
+    private Cell getValidBoundaryCell(Cell[][] grid, int height, int width) {
+        while (true) {
+            int[] cell = getRandomBoundaryCell(height, width);
+            int x = cell[0];
+            int y = cell[1];
+            if (hasAdjacentPassage(grid, x, y)) {
+                grid[y][x].type(CellType.PASSAGE);
+                return grid[y][x];
+            }
+        }
+    }
+    private boolean hasAdjacentPassage(Cell[][] grid, int x, int y) {
+        if (x > 0 && grid[y][x - 1].type() == CellType.PASSAGE) return true;
+        if (x < grid[0].length - 1 && grid[y][x + 1].type() == CellType.PASSAGE) return true;
+        if (y > 0 && grid[y - 1][x].type() == CellType.PASSAGE) return true;
+        if (y < grid.length - 1 && grid[y + 1][x].type() == CellType.PASSAGE) return true;
+        return false;
     }
 }
