@@ -9,6 +9,7 @@ import java.util.*;
 public class BFSSolverStrategy implements SolverStrategy {
     private int visitedCellsCount;
     private int passagesCount;
+    int optimalPathLength;
 
     @Override
     public boolean solve(Maze maze) {
@@ -18,15 +19,18 @@ public class BFSSolverStrategy implements SolverStrategy {
         boolean[][] visited = new boolean[height][width];
         Cell[][] parent = new Cell[height][width];
 
+        Cell start = maze.start();
+        Cell end = maze.end();
+
         Queue<Cell> queue = new LinkedList<>();
-        queue.add(grid[1][0]);
-        visited[1][0] = true;
+        queue.add(start);
+        visited[start.y()][start.x()] = true;
         visitedCellsCount = 1;
         passagesCount = countPassages(grid);
 
         while (!queue.isEmpty()) {
             Cell current = queue.poll();
-            if (current.equals(grid[height - 2][width - 2])) {
+            if (current.equals(end)) {
                 markPath(parent, current);
                 updateMazeStats(maze);
                 return true;
@@ -50,6 +54,7 @@ public class BFSSolverStrategy implements SolverStrategy {
         maze.visitedCellsCount(visitedCellsCount);
         maze.passageCellsCount(passagesCount);
         maze.percentageOfVisitedCells((int) ((double) visitedCellsCount / passagesCount * 100));
+        maze.optimalPathLength(optimalPathLength);
     }
 
     private int countPassages(Cell[][] grid) {
@@ -69,6 +74,7 @@ public class BFSSolverStrategy implements SolverStrategy {
         while (current != null) {
             current.type(CellType.PATH);
             current = parent[current.y()][current.x()];
+            optimalPathLength++;
         }
     }
 

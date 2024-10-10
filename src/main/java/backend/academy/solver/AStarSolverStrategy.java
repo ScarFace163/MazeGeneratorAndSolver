@@ -9,6 +9,8 @@ import java.util.*;
 public class AStarSolverStrategy implements SolverStrategy {
     private int visitedCellsCount;
     private int passagesCount;
+    int optimalPathLength;
+
 
     private static class Node implements Comparable<Node> {
         Cell cell;
@@ -35,8 +37,8 @@ public class AStarSolverStrategy implements SolverStrategy {
 
     @Override
     public boolean solve(Maze maze) {
-        Cell start = maze.grid()[1][0];
-        Cell end = maze.grid()[maze.height() - 2][maze.width() - 2];
+        Cell start = maze.start();
+        Cell end = maze.end();
 
         PriorityQueue<Node> openList = new PriorityQueue<>();
         Set<Cell> closedList = new HashSet<>();
@@ -80,6 +82,7 @@ public class AStarSolverStrategy implements SolverStrategy {
         maze.visitedCellsCount(visitedCellsCount);
         maze.passageCellsCount(passagesCount);
         maze.percentageOfVisitedCells((int) ((double) visitedCellsCount / passagesCount * 100));
+        maze.optimalPathLength(optimalPathLength);
     }
 
     private int countPassages(Cell[][] grid) {
@@ -103,6 +106,7 @@ public class AStarSolverStrategy implements SolverStrategy {
         while (current != null) {
             current.cell.type(CellType.PATH);
             current = current.parent;
+            optimalPathLength++;
         }
     }
 
