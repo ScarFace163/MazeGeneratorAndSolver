@@ -1,27 +1,25 @@
 package backend.academy.model;
 
+import backend.academy.enums.CellType;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
+@Setter
 public class Maze {
-    private final int height;
-    private final int width;
-    private final Cell[][] grid;
-    @Setter private int visitedCellsCount;
-    @Setter private int percentageOfVisitedCells;
-    @Setter private int passageCellsCount;
+    private int height;
+    private int width;
+    private Cell[][] grid;
+    private Cell start;
+    private Cell end;
+    private int visitedCellsCount;
+    private int passageCellsCount;
+    private int percentageOfVisitedCells;
+    private int optimalPathLength;
 
-    public Maze(
-        int height,
-        int width,
-        Cell[][] grid
-    ) {
+    public Maze(int height, int width, Cell[][] grid) {
         this.height = height;
         this.width = width;
         this.grid = grid;
-        this.visitedCellsCount = 0;
-        this.percentageOfVisitedCells = 0;
-        this.passageCellsCount = 0;
     }
 }
