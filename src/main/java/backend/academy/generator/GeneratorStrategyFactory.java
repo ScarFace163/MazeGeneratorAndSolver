@@ -9,6 +9,8 @@ public class GeneratorStrategyFactory {
         switch (type){
             case GeneratorStrategyType.KRUSKAL_STRATEGY:
                 return new KruskalGeneratorStrategy();
+            case GeneratorStrategyType.PRIM_STRATEGY:
+                return new PrimGeneratorStrategy();
             default:
                 log.info("No such generator type");
         }
