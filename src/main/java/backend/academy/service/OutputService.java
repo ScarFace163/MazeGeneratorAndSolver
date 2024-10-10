@@ -31,6 +31,7 @@ public class OutputService {
         println("Passage cells : " + maze.passageCellsCount());
         println("Visited cells : " + maze.visitedCellsCount());
         println("Percentage of visited cells : " + maze.percentageOfVisitedCells());
+        println("Optimal path length : " + maze.optimalPathLength());
     }
     public void printChooseGeneratorTypeMenu(){
         println("Select the algorithm by which the maze will be generated. Type nothing if you want the algorithm to be selected randomly");
