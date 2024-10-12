@@ -1,9 +1,8 @@
 package backend.academy.generator;
 
+import backend.academy.enums.CellType;
 import backend.academy.model.Cell;
 import backend.academy.model.Maze;
-import backend.academy.enums.CellType;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -22,8 +21,6 @@ public class PrimGeneratorStrategy implements GeneratorStrategy {
                 grid[y][x] = new Cell(x, y, CellType.WALL);
             }
         }
-
-        // Start from a random cell inside the grid
         int startX = random.nextInt(width / 2) * 2 + 1;
         int startY = random.nextInt(height / 2) * 2 + 1;
         grid[startY][startX].type(CellType.PASSAGE);
@@ -39,7 +36,6 @@ public class PrimGeneratorStrategy implements GeneratorStrategy {
             }
         }
 
-        // Set the start and finish points on the boundary
         Cell start = getValidBoundaryCell(grid, height, width);
         Cell finish = getValidBoundaryCell(grid, height, width);
 
@@ -66,35 +62,37 @@ public class PrimGeneratorStrategy implements GeneratorStrategy {
     }
 
     private boolean hasAdjacentPassage(Cell[][] grid, int x, int y) {
-        if (x > 0 && grid[y][x - 1].type() == CellType.PASSAGE) return true;
-        if (x < grid[0].length - 1 && grid[y][x + 1].type() == CellType.PASSAGE) return true;
-        if (y > 0 && grid[y - 1][x].type() == CellType.PASSAGE) return true;
-        if (y < grid.length - 1 && grid[y + 1][x].type() == CellType.PASSAGE) return true;
-        return false;
+        if (x > 0 && grid[y][x - 1].type() == CellType.PASSAGE) {
+            return true;
+        }
+        if (x < grid[0].length - 1 && grid[y][x + 1].type() == CellType.PASSAGE) {
+            return true;
+        }
+        if (y > 0 && grid[y - 1][x].type() == CellType.PASSAGE) {
+            return true;
+        }
+        return y < grid.length - 1 && grid[y + 1][x].type() == CellType.PASSAGE;
     }
 
+    @SuppressWarnings("checkstyle:MagicNumber")
     private int[] getRandomBoundaryCell(int height, int width) {
         int side = random.nextInt(4);
-        int x = 0, y = 0;
+        int x = 0;
+        int y = 0;
         switch (side) {
-            case 0: // Top
-                x = random.nextInt(width);
-                y = 0;
-                break;
-            case 1: // Bottom
+            case 0 -> x = random.nextInt(width);
+            case 1 -> {
                 x = random.nextInt(width);
                 y = height - 1;
-                break;
-            case 2: // Left
-                x = 0;
-                y = random.nextInt(height);
-                break;
-            case 3: // Right
+            }
+            case 2 -> y = random.nextInt(height);
+            case 3 -> {
                 x = width - 1;
                 y = random.nextInt(height);
-                break;
+            }
+            default -> throw new RuntimeException();
         }
-        return new int[]{x, y};
+        return new int[] {x, y};
     }
 
     private void addWalls(Cell[][] grid, List<Cell> walls, int x, int y) {
@@ -117,10 +115,18 @@ public class PrimGeneratorStrategy implements GeneratorStrategy {
         int y = wall.y();
         int passages = 0;
 
-        if (x > 0 && grid[y][x - 1].type() == CellType.PASSAGE) passages++;
-        if (x < grid[0].length - 1 && grid[y][x + 1].type() == CellType.PASSAGE) passages++;
-        if (y > 0 && grid[y - 1][x].type() == CellType.PASSAGE) passages++;
-        if (y < grid.length - 1 && grid[y + 1][x].type() == CellType.PASSAGE) passages++;
+        if (x > 0 && grid[y][x - 1].type() == CellType.PASSAGE) {
+            passages++;
+        }
+        if (x < grid[0].length - 1 && grid[y][x + 1].type() == CellType.PASSAGE) {
+            passages++;
+        }
+        if (y > 0 && grid[y - 1][x].type() == CellType.PASSAGE) {
+            passages++;
+        }
+        if (y < grid.length - 1 && grid[y + 1][x].type() == CellType.PASSAGE) {
+            passages++;
+        }
 
         return passages == 1;
     }

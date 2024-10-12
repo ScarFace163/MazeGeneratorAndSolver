@@ -11,10 +11,11 @@ import backend.academy.solver.SolverStrategyFactory;
 public class MainService {
     InputService inputService;
     OutputService outputService;
-    public void start(){
+
+    public void start() {
         outputService.printChooseGeneratorTypeMenu();
         GeneratorStrategyType generatorStrategyType = inputService.inputGenerateStrategyType();
-        while (generatorStrategyType == null){
+        while (generatorStrategyType == null) {
             outputService.printTryAgain();
             outputService.printChooseGeneratorTypeMenu();
             generatorStrategyType = inputService.inputGenerateStrategyType();
@@ -22,22 +23,22 @@ public class MainService {
 
         outputService.printChooseSolverTypeMenu();
         SolverStrategyType solverStrategyType = inputService.inputSolverStrategyType();
-        while (solverStrategyType == null){
+        while (solverStrategyType == null) {
             outputService.printTryAgain();
             outputService.printChooseSolverTypeMenu();
             solverStrategyType = inputService.inputSolverStrategyType();
         }
-        outputService.printSelectedStrategies(generatorStrategyType, solverStrategyType);
         GeneratorStrategy generator = GeneratorStrategyFactory.getGenerator(generatorStrategyType);
         SolverStrategy solver = SolverStrategyFactory.getSolver(solverStrategyType);
+        outputService.printSelectedStrategies(generatorStrategyType, solverStrategyType);
         outputService.printChooseMazeSize();
         int[] size = inputService.inputMazeSize();
-        while (size == null){
+        while (size == null) {
             outputService.printTryAgain();
             outputService.printChooseMazeSize();
             size = inputService.inputMazeSize();
         }
-        Maze maze = generator.generate(size[0],size[1]);
+        Maze maze = generator.generate(size[0], size[1]);
         solver.solve(maze);
         outputService.printMaze(maze);
     }

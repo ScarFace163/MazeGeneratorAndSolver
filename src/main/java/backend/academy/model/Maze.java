@@ -1,6 +1,5 @@
 package backend.academy.model;
 
-import backend.academy.enums.CellType;
 import lombok.Getter;
 import lombok.Setter;
 
