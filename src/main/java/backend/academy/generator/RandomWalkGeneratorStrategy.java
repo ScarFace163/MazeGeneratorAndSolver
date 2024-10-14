@@ -83,20 +83,20 @@ public class RandomWalkGeneratorStrategy implements GeneratorStrategy {
         int y = 0;
         switch (side) {
             case 0:
-                x = random.nextInt(width);
+                x = random.nextInt(1,width-1);
                 y = 0;
                 break;
             case 1:
-                x = random.nextInt(width);
+                x = random.nextInt(1,width-1);
                 y = height - 1;
                 break;
             case 2:
                 x = 0;
-                y = random.nextInt(height);
+                y = random.nextInt(1,height-1);
                 break;
             case 3:
                 x = width - 1;
-                y = random.nextInt(height);
+                y = random.nextInt(1,height-1);
                 break;
             default:
                 throw new RuntimeException();
