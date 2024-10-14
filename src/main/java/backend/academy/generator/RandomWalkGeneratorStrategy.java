@@ -3,7 +3,6 @@ package backend.academy.generator;
 import backend.academy.enums.CellType;
 import backend.academy.model.Cell;
 import backend.academy.model.Maze;
-
 import java.util.Random;
 import java.util.Stack;
 
@@ -12,11 +11,7 @@ public class RandomWalkGeneratorStrategy implements GeneratorStrategy {
 
     @Override
     public Maze generate(int height, int width) {
-        if (height % 2 == 0) height++;
-        if (width % 2 == 0) width++;
-
         Cell[][] grid = new Cell[height][width];
-
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 grid[y][x] = new Cell(x, y, CellType.WALL);
@@ -53,27 +48,39 @@ public class RandomWalkGeneratorStrategy implements GeneratorStrategy {
         return maze;
     }
 
+    @SuppressWarnings("checkstyle:MagicNumber")
     private Cell getRandomNeighbor(Cell[][] grid, Cell cell) {
         int x = cell.x();
         int y = cell.y();
         Cell[] neighbors = new Cell[4];
         int count = 0;
 
-        if (x > 1 && grid[y][x - 2].type() == CellType.WALL) neighbors[count++] = new Cell(x - 2, y, CellType.PASSAGE);
-        if (x < grid[0].length - 2 && grid[y][x + 2].type() == CellType.WALL) neighbors[count++] = new Cell(x + 2, y, CellType.PASSAGE);
-        if (y > 1 && grid[y - 2][x].type() == CellType.WALL) neighbors[count++] = new Cell(x, y - 2, CellType.PASSAGE);
-        if (y < grid.length - 2 && grid[y + 2][x].type() == CellType.WALL) neighbors[count++] = new Cell(x, y + 2, CellType.PASSAGE);
+        if (x > 1 && grid[y][x - 2].type() == CellType.WALL) {
+            neighbors[count++] = new Cell(x - 2, y, CellType.PASSAGE);
+        }
+        if (x < grid[0].length - 2 && grid[y][x + 2].type() == CellType.WALL) {
+            neighbors[count++] = new Cell(x + 2, y, CellType.PASSAGE);
+        }
+        if (y > 1 && grid[y - 2][x].type() == CellType.WALL) {
+            neighbors[count++] = new Cell(x, y - 2, CellType.PASSAGE);
+        }
+        if (y < grid.length - 2 && grid[y + 2][x].type() == CellType.WALL) {
+            neighbors[count++] = new Cell(x, y + 2, CellType.PASSAGE);
+        }
 
-        if (count == 0) return null;
+        if (count == 0) {
+            return null;
+        }
         return neighbors[random.nextInt(count)];
     }
 
+    @SuppressWarnings("checkstyle:MagicNumber")
     private Cell getRandomBorderCell(Cell[][] grid) {
         int height = grid.length;
         int width = grid[0].length;
         int side = random.nextInt(4);
-        int x = 0, y = 0;
-
+        int x = 0;
+        int y = 0;
         switch (side) {
             case 0:
                 x = random.nextInt(width);
@@ -91,6 +98,8 @@ public class RandomWalkGeneratorStrategy implements GeneratorStrategy {
                 x = width - 1;
                 y = random.nextInt(height);
                 break;
+            default:
+                throw new RuntimeException();
         }
 
         return grid[y][x];
