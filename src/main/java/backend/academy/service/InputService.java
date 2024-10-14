@@ -2,6 +2,7 @@ package backend.academy.service;
 
 import backend.academy.enums.GeneratorStrategyType;
 import backend.academy.enums.SolverStrategyType;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -27,7 +28,7 @@ public class InputService {
     }
 
     public InputService() {
-        sc = new Scanner(System.in);
+        sc = new Scanner(System.in, StandardCharsets.UTF_8);
         random = new Random();
     }
 

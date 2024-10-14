@@ -20,8 +20,6 @@ public class KruskalGeneratorStrategy implements GeneratorStrategy {
         initializeEdges(height, width, edges);
         generateMaze(edges, uf, width, grid);
 
-        // Set the start and finish points on the boundary
-        // Set the start and finish points on the boundary
         Cell start = getValidBoundaryCell(grid, height, width);
         Cell finish = getValidBoundaryCell(grid, height, width);
 
