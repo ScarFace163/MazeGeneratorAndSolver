@@ -20,14 +20,7 @@ public class KruskalGeneratorStrategy implements GeneratorStrategy {
         initializeEdges(height, width, edges);
         generateMaze(edges, uf, width, grid);
 
-        Cell start = getValidBoundaryCell(grid, height, width);
-        Cell finish = getValidBoundaryCell(grid, height, width);
-
-        Maze maze = new Maze(height, width, grid);
-        maze.start(start);
-        maze.end(finish);
-
-        return maze;
+        return new Maze(height, width, grid);
     }
 
     private void initializeMaze(int height, int width, Cell[][] maze) {

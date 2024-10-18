@@ -36,14 +36,7 @@ public class PrimGeneratorStrategy implements GeneratorStrategy {
             }
         }
 
-        Cell start = getValidBoundaryCell(grid, height, width);
-        Cell finish = getValidBoundaryCell(grid, height, width);
-
-        Maze maze = new Maze(height, width, grid);
-        maze.start(start);
-        maze.end(finish);
-
-        return maze;
+        return new Maze(height, width, grid);
     }
 
     private Cell getValidBoundaryCell(Cell[][] grid, int height, int width) {

@@ -11,6 +11,7 @@ import backend.academy.solver.SolverStrategyFactory;
 public class MainService {
     InputService inputService;
     OutputService outputService;
+    MazeService mazeService;
 
     public void start() {
         outputService.printChooseGeneratorTypeMenu();
@@ -39,12 +40,36 @@ public class MainService {
             size = inputService.inputMazeSize();
         }
         Maze maze = generator.generate(size[0], size[1]);
-        solver.solve(maze);
-        outputService.printMaze(maze);
+        outputService.printMazeForChooseCell(maze);
+        outputService.printChooseStartCell();
+        int[] start = inputService.inputCell();
+        while (start == null) {
+            outputService.printTryAgain();
+            outputService.printChooseStartCell();
+            start = inputService.inputCell();
+        }
+        mazeService.setStartCell(maze, start);
+        outputService.printChooseEndCell();
+        int[] end = inputService.inputCell();
+        while (end == null) {
+            outputService.printTryAgain();
+            outputService.printChooseEndCell();
+            end = inputService.inputCell();
+        }
+        mazeService.setEndCell(maze, end);
+        if (solver.solve(maze)){
+            outputService.println("Solution found");
+            outputService.printMaze(maze);
+        }
+        else{
+            outputService.println("Solution not found");
+            outputService.printMaze(maze);
+        }
     }
 
     public MainService() {
         inputService = new InputService();
         outputService = new OutputService();
+        mazeService = new MazeService();
     }
 }

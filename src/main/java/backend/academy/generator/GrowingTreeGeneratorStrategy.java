@@ -44,17 +44,7 @@ public class GrowingTreeGeneratorStrategy implements GeneratorStrategy {
                 cells.remove(current);
             }
         }
-
-        Cell startCell = getRandomBorderCell(grid);
-        Cell finishCell = getRandomBorderCell(grid);
-        startCell.type(CellType.PASSAGE);
-        finishCell.type(CellType.PASSAGE);
-
-        Maze maze = new Maze(height, width, grid);
-        maze.start(startCell);
-        maze.end(finishCell);
-
-        return maze;
+        return new Maze(height, width, grid);
     }
 
     @SuppressWarnings("checkstyle:MagicNumber")

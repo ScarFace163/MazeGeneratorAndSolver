@@ -66,4 +66,19 @@ public class InputService {
             return null;
         }
     }
+
+    public int[] inputCell() {
+        String[] cords = sc.nextLine().split(" ");
+        int[] ans = new int[2];
+        if (cords.length != 2) {
+            return null;
+        }
+        try {
+            ans[0] = Integer.parseInt(cords[0]);
+            ans[1] = Integer.parseInt(cords[1]);
+            return ans;
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }
