@@ -14,6 +14,26 @@ public class MainService {
     MazeService mazeService;
 
     public void start() {
+
+        GeneratorStrategyType generatorStrategyType = getGenerator();
+        GeneratorStrategy generator = GeneratorStrategyFactory.getGenerator(generatorStrategyType);
+        SolverStrategyType solverStrategyType = getSolver();
+        SolverStrategy solver = SolverStrategyFactory.getSolver(solverStrategyType);
+
+        outputService.printSelectedStrategies(generatorStrategyType, solverStrategyType);
+
+        Maze maze = getMaze(generator);
+
+        if (solver.solve(maze)) {
+            outputService.println("Solution found");
+            outputService.printMaze(maze);
+        } else {
+            outputService.println("Solution not found");
+            outputService.printMaze(maze);
+        }
+    }
+
+    private GeneratorStrategyType getGenerator() {
         outputService.printChooseGeneratorTypeMenu();
         GeneratorStrategyType generatorStrategyType = inputService.inputGenerateStrategyType();
         while (generatorStrategyType == null) {
@@ -21,7 +41,10 @@ public class MainService {
             outputService.printChooseGeneratorTypeMenu();
             generatorStrategyType = inputService.inputGenerateStrategyType();
         }
+        return generatorStrategyType;
+    }
 
+    private SolverStrategyType getSolver(){
         outputService.printChooseSolverTypeMenu();
         SolverStrategyType solverStrategyType = inputService.inputSolverStrategyType();
         while (solverStrategyType == null) {
@@ -29,9 +52,9 @@ public class MainService {
             outputService.printChooseSolverTypeMenu();
             solverStrategyType = inputService.inputSolverStrategyType();
         }
-        GeneratorStrategy generator = GeneratorStrategyFactory.getGenerator(generatorStrategyType);
-        SolverStrategy solver = SolverStrategyFactory.getSolver(solverStrategyType);
-        outputService.printSelectedStrategies(generatorStrategyType, solverStrategyType);
+        return solverStrategyType;
+    }
+    private Maze getMaze(GeneratorStrategy generator){
         outputService.printChooseMazeSize();
         int[] size = inputService.inputMazeSize();
         while (size == null) {
@@ -57,14 +80,7 @@ public class MainService {
             end = inputService.inputCell();
         }
         mazeService.setEndCell(maze, end);
-        if (solver.solve(maze)){
-            outputService.println("Solution found");
-            outputService.printMaze(maze);
-        }
-        else{
-            outputService.println("Solution not found");
-            outputService.printMaze(maze);
-        }
+        return maze;
     }
 
     public MainService() {
