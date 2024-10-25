@@ -35,14 +35,17 @@ public class OutputService {
         println("Optimal path length : " + maze.optimalPathLength());
     }
 
+    @SuppressWarnings("checkstyle:MagicNumber")
     public void printMazeForChooseCell(Maze maze) {
         Cell[][] grid = maze.grid();
         print("  ");
-        for (int i= 0;i<grid.length;i++) print(i<10?i+" ": String.valueOf(i));
+        for (int i = 0; i < grid.length; i++) {
+            print(i < 10 ? i + " " : String.valueOf(i));
+        }
         print("\n");
-        for (int i =0; i < grid.length; i++){
-            print(i<10?i+" ": String.valueOf(i));
-            for (Cell cell : grid[i]){
+        for (int i = 0; i < grid.length; i++) {
+            print(i < 10 ? i + " " : String.valueOf(i));
+            for (Cell cell : grid[i]) {
                 switch (cell.type()) {
                     case WALL -> print("██");
                     case PASSAGE -> print("  ");
@@ -56,16 +59,16 @@ public class OutputService {
     }
 
     public void printChooseGeneratorTypeMenu() {
-        println("Select the algorithm by which the maze will be generated." +
-            " Type nothing if you want the algorithm to be selected randomly");
+        println("Select the algorithm by which the maze will be generated."
+            + " Type nothing if you want the algorithm to be selected randomly");
         for (GeneratorStrategyType type : GeneratorStrategyType.values()) {
             printType(String.valueOf(type), type.ordinal());
         }
     }
 
     public void printChooseSolverTypeMenu() {
-        println("Select the algorithm by which the maze will be solved. " +
-            "Type nothing if you want the algorithm to be selected randomly");
+        println("Select the algorithm by which the maze will be solved. "
+            + "Type nothing if you want the algorithm to be selected randomly");
         for (SolverStrategyType type : SolverStrategyType.values()) {
             printType(String.valueOf(type), type.ordinal());
         }
@@ -97,4 +100,5 @@ public class OutputService {
     public void printChooseEndCell() {
         println("Type the coordinates of end cell of Maze in format \"row column\"");
     }
+
 }

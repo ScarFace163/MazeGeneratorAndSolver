@@ -11,6 +11,7 @@ import backend.academy.solver.SolverStrategyFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SolversTest {
     Maze maze;
@@ -27,15 +28,25 @@ public class SolversTest {
     public void testSolvers() {
         Maze maze1 = maze;
         Maze maze2 = maze;
+
         maze1.start(maze1.grid()[1][0]);
         maze1.end(maze1.grid()[19][20]);
+
         maze2.start(maze1.grid()[1][0]);
         maze2.end(maze1.grid()[19][20]);
+
         SolverStrategy bfsSolver = SolverStrategyFactory.getSolver(SolverStrategyType.BFS);
         SolverStrategy aStarSolver = SolverStrategyFactory.getSolver(SolverStrategyType.ASTAR);
+
         bfsSolver.solve(maze1);
         aStarSolver.solve(maze2);
+
+        assertTrue(maze1.optimalPathLength()!=0);
+        assertTrue(maze2.optimalPathLength()!=0);
+
         assertEquals(maze1.optimalPathLength(), maze2.optimalPathLength());
+
+
     }
 
 }

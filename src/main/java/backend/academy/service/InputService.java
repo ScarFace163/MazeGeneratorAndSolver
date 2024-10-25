@@ -2,10 +2,12 @@ package backend.academy.service;
 
 import backend.academy.enums.GeneratorStrategyType;
 import backend.academy.enums.SolverStrategyType;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 import java.util.Scanner;
 
+@SuppressFBWarnings(value = {"PREDICTABLE_RANDOM", "CLI_CONSTANT_LIST_INDEX"})
 public class InputService {
     Scanner sc;
     Random random;

@@ -3,13 +3,13 @@ package backend.academy.generator;
 import backend.academy.enums.CellType;
 import backend.academy.model.Cell;
 import backend.academy.model.Maze;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
+@SuppressFBWarnings(value = {"IM_AVERAGE_COMPUTATION_COULD_OVERFLOW", "CLI_CONSTANT_LIST_INDEX"})
 public class KruskalGeneratorStrategy implements GeneratorStrategy {
-    private static final Random RANDOM = new Random();
 
     @Override
     public Maze generate(int height, int width) {
@@ -60,58 +60,6 @@ public class KruskalGeneratorStrategy implements GeneratorStrategy {
                 maze[(y1 + y2) / 2][(x1 + x2) / 2].type(CellType.PASSAGE);
             }
         }
-    }
-
-    @SuppressWarnings("checkstyle:MagicNumber")
-    private int[] getRandomBoundaryCell(int height, int width) {
-        int side = RANDOM.nextInt(4);
-        int x = 0;
-        int y = 0;
-        switch (side) {
-            case 0: // Top
-                x = RANDOM.nextInt(width);
-                break;
-            case 1: // Bottom
-                x = RANDOM.nextInt(width);
-                y = height - 1;
-                break;
-            case 2: // Left
-                y = RANDOM.nextInt(height);
-                break;
-            case 3: // Right
-                x = width - 1;
-                y = RANDOM.nextInt(height);
-                break;
-            default:
-                throw new RuntimeException();
-        }
-        return new int[] {x, y};
-    }
-
-    private Cell getValidBoundaryCell(Cell[][] grid, int height, int width) {
-        int[] cell;
-        while (true) {
-            cell = getRandomBoundaryCell(height, width);
-            int x = cell[0];
-            int y = cell[1];
-            if (hasAdjacentPassage(grid, x, y)) {
-                grid[y][x].type(CellType.PASSAGE);
-                return grid[y][x];
-            }
-        }
-    }
-
-    private boolean hasAdjacentPassage(Cell[][] grid, int x, int y) {
-        if (x > 0 && grid[y][x - 1].type() == CellType.PASSAGE) {
-            return true;
-        }
-        if (x < grid[0].length - 1 && grid[y][x + 1].type() == CellType.PASSAGE) {
-            return true;
-        }
-        if (y > 0 && grid[y - 1][x].type() == CellType.PASSAGE) {
-            return true;
-        }
-        return y < grid.length - 1 && grid[y + 1][x].type() == CellType.PASSAGE;
     }
 
     private static class Edge {

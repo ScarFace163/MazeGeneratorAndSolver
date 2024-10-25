@@ -2,7 +2,6 @@ package backend.academy.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Arrays;
 
 @Getter
 @Setter
@@ -23,9 +22,4 @@ public class Maze {
         this.grid = grid;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        Maze maze = (Maze) obj;
-        return Arrays.deepEquals(this.grid, maze.grid);
-    }
 }

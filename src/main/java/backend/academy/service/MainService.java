@@ -7,7 +7,9 @@ import backend.academy.generator.GeneratorStrategyFactory;
 import backend.academy.model.Maze;
 import backend.academy.solver.SolverStrategy;
 import backend.academy.solver.SolverStrategyFactory;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+@SuppressFBWarnings(value = {"CLI_CONSTANT_LIST_INDEX"})
 public class MainService {
     InputService inputService;
     OutputService outputService;
@@ -44,7 +46,7 @@ public class MainService {
         return generatorStrategyType;
     }
 
-    private SolverStrategyType getSolver(){
+    private SolverStrategyType getSolver() {
         outputService.printChooseSolverTypeMenu();
         SolverStrategyType solverStrategyType = inputService.inputSolverStrategyType();
         while (solverStrategyType == null) {
@@ -54,7 +56,8 @@ public class MainService {
         }
         return solverStrategyType;
     }
-    private Maze getMaze(GeneratorStrategy generator){
+
+    private Maze getMaze(GeneratorStrategy generator) {
         outputService.printChooseMazeSize();
         int[] size = inputService.inputMazeSize();
         while (size == null) {

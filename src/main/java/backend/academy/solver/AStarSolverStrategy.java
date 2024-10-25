@@ -3,12 +3,15 @@ package backend.academy.solver;
 import backend.academy.enums.CellType;
 import backend.academy.model.Cell;
 import backend.academy.model.Maze;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+@SuppressFBWarnings(value = {"CNC_COLLECTION_NAMING_CONFUSION",
+    "PSC_PRESIZE_COLLECTIONS", "EQ_COMPARETO_USE_OBJECT_EQUALS"})
 public class AStarSolverStrategy implements SolverStrategy {
     private int visitedCellsCount;
     private int passagesCount;

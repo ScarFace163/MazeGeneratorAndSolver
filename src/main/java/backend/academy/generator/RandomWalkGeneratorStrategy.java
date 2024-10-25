@@ -3,9 +3,13 @@ package backend.academy.generator;
 import backend.academy.enums.CellType;
 import backend.academy.model.Cell;
 import backend.academy.model.Maze;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Random;
-import java.util.Stack;
 
+@SuppressFBWarnings(value = {"PREDICTABLE_RANDOM", "IM_AVERAGE_COMPUTATION_COULD_OVERFLOW",
+    "CLI_CONSTANT_LIST_INDEX", "CNC_COLLECTION_NAMING_CONFUSION"})
 public class RandomWalkGeneratorStrategy implements GeneratorStrategy {
     private final Random random = new Random();
 
@@ -18,21 +22,21 @@ public class RandomWalkGeneratorStrategy implements GeneratorStrategy {
             }
         }
 
-        Stack<Cell> stack = new Stack<>();
+        Deque<Cell> deque = new ArrayDeque<>();
         Cell start = new Cell(1, 1, CellType.PASSAGE);
         grid[1][1] = start;
-        stack.push(start);
+        deque.push(start);
 
-        while (!stack.isEmpty()) {
-            Cell current = stack.peek();
+        while (!deque.isEmpty()) {
+            Cell current = deque.peek();
             Cell next = getRandomNeighbor(grid, current);
 
             if (next != null) {
-                stack.push(next);
+                deque.push(next);
                 grid[next.y()][next.x()].type(CellType.PASSAGE);
                 grid[(current.y() + next.y()) / 2][(current.x() + next.x()) / 2].type(CellType.PASSAGE);
             } else {
-                stack.pop();
+                deque.pop();
             }
         }
 
@@ -65,34 +69,4 @@ public class RandomWalkGeneratorStrategy implements GeneratorStrategy {
         return neighbors[random.nextInt(count)];
     }
 
-    @SuppressWarnings("checkstyle:MagicNumber")
-    private Cell getRandomBorderCell(Cell[][] grid) {
-        int height = grid.length;
-        int width = grid[0].length;
-        int side = random.nextInt(4);
-        int x = 0;
-        int y = 0;
-        switch (side) {
-            case 0:
-                x = random.nextInt(1,width-1);
-                y = 0;
-                break;
-            case 1:
-                x = random.nextInt(1,width-1);
-                y = height - 1;
-                break;
-            case 2:
-                x = 0;
-                y = random.nextInt(1,height-1);
-                break;
-            case 3:
-                x = width - 1;
-                y = random.nextInt(1,height-1);
-                break;
-            default:
-                throw new RuntimeException();
-        }
-
-        return grid[y][x];
-    }
 }

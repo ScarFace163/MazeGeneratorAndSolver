@@ -3,17 +3,19 @@ package backend.academy.generator;
 import backend.academy.enums.CellType;
 import backend.academy.model.Cell;
 import backend.academy.model.Maze;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@SuppressFBWarnings(value = {"PREDICTABLE_RANDOM", "IM_AVERAGE_COMPUTATION_COULD_OVERFLOW"})
 public class GrowingTreeGeneratorStrategy implements GeneratorStrategy {
     private final Random random = new Random();
 
     @Override
     public Maze generate(int height, int width) {
         Cell[][] grid = new Cell[height][width];
-
+        int startInd = 1;
         // Инициализация сетки как стен
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -23,13 +25,17 @@ public class GrowingTreeGeneratorStrategy implements GeneratorStrategy {
 
         List<Cell> cells = new ArrayList<>();
         Cell start = new Cell(1, 1, CellType.PASSAGE);
-        grid[1][1] = start;
+        if (height > 1 && width > 1) {
+            grid[startInd][startInd] = start;
+        } else {
+            throw new IllegalArgumentException("Height and width must be greater than 1");
+        }
         cells.add(start);
 
         while (!cells.isEmpty()) {
             Cell current;
             if (random.nextBoolean()) {
-                current = cells.get(cells.size() - 1);
+                current = cells.getLast();
             } else {
                 current = cells.get(random.nextInt(cells.size()));
             }
@@ -73,35 +79,4 @@ public class GrowingTreeGeneratorStrategy implements GeneratorStrategy {
         return neighbors[random.nextInt(count)];
     }
 
-    @SuppressWarnings("checkstyle:MagicNumber")
-    private Cell getRandomBorderCell(Cell[][] grid) {
-        int height = grid.length;
-        int width = grid[0].length;
-        int side = random.nextInt(4);
-        int x = 0;
-        int y = 0;
-
-        switch (side) {
-            case 0:
-                x = random.nextInt(width);
-                y = 0;
-                break;
-            case 1:
-                x = random.nextInt(width);
-                y = height - 1;
-                break;
-            case 2:
-                x = 0;
-                y = random.nextInt(height);
-                break;
-            case 3:
-                x = width - 1;
-                y = random.nextInt(height);
-                break;
-            default:
-                throw new RuntimeException();
-        }
-
-        return grid[y][x];
-    }
 }
