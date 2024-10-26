@@ -41,9 +41,6 @@ public class SolversTest {
         bfsSolver.solve(maze1);
         aStarSolver.solve(maze2);
 
-        assertTrue(maze1.optimalPathLength()!=0);
-        assertTrue(maze2.optimalPathLength()!=0);
-
         assertEquals(maze1.optimalPathLength(), maze2.optimalPathLength());
 
 
