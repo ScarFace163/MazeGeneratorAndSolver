@@ -68,19 +68,19 @@ public class MainService {
         Maze maze = generator.generate(size[0], size[1]);
         outputService.printMazeForChooseCell(maze);
         outputService.printChooseStartCell();
-        int[] start = inputService.inputCell();
+        int[] start = inputService.inputCell(maze);
         while (start == null) {
             outputService.printTryAgain();
             outputService.printChooseStartCell();
-            start = inputService.inputCell();
+            start = inputService.inputCell(maze);
         }
         mazeService.setStartCell(maze, start);
         outputService.printChooseEndCell();
-        int[] end = inputService.inputCell();
+        int[] end = inputService.inputCell(maze);
         while (end == null) {
             outputService.printTryAgain();
             outputService.printChooseEndCell();
-            end = inputService.inputCell();
+            end = inputService.inputCell(maze);
         }
         mazeService.setEndCell(maze, end);
         return maze;

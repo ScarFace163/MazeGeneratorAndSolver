@@ -2,6 +2,7 @@ package backend.academy.service;
 
 import backend.academy.enums.GeneratorStrategyType;
 import backend.academy.enums.SolverStrategyType;
+import backend.academy.model.Maze;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
@@ -69,7 +70,7 @@ public class InputService {
         }
     }
 
-    public int[] inputCell() {
+    public int[] inputCell(Maze maze) {
         String[] cords = sc.nextLine().split(" ");
         int[] ans = new int[2];
         if (cords.length != 2) {
@@ -78,6 +79,9 @@ public class InputService {
         try {
             ans[0] = Integer.parseInt(cords[0]);
             ans[1] = Integer.parseInt(cords[1]);
+            if (ans[0] < 0 || ans[0] >= maze.height() || ans[1] < 0 || ans[1] >= maze.width()) {
+                return null;
+            }
             return ans;
         } catch (Exception e) {
             return null;

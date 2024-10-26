@@ -4,26 +4,15 @@ import backend.academy.enums.CellType;
 import backend.academy.model.Cell;
 import backend.academy.model.Maze;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+@SuppressWarnings("PMD")
 @SuppressFBWarnings(value = {"CNC_COLLECTION_NAMING_CONFUSION",
     "PSC_PRESIZE_COLLECTIONS", "EQ_COMPARETO_USE_OBJECT_EQUALS"})
 public class AStarSolverStrategy implements SolverStrategy {
-    private int visitedCellsCount;
-    private int passagesCount;
     int optimalPathLength;
-
-    @SuppressWarnings("checkstyle:MagicNumber")
-    private void updateMazeStats(Maze maze) {
-        maze.visitedCellsCount(visitedCellsCount);
-        maze.passageCellsCount(passagesCount);
-        maze.percentageOfVisitedCells((int) ((double) visitedCellsCount / passagesCount * 100));
-        maze.optimalPathLength(optimalPathLength);
-    }
 
     private int countPassages(Cell[][] grid) {
         int count = 0;
@@ -50,27 +39,6 @@ public class AStarSolverStrategy implements SolverStrategy {
         }
     }
 
-    private List<Cell> getNeighbors(Cell cell, Cell[][] grid) {
-        List<Cell> neighbors = new ArrayList<>();
-        int row = cell.y();
-        int col = cell.x();
-
-        if (row > 0) {
-            neighbors.add(grid[row - 1][col]);
-        }
-        if (row < grid.length - 1) {
-            neighbors.add(grid[row + 1][col]);
-        }
-        if (col > 0) {
-            neighbors.add(grid[row][col - 1]);
-        }
-        if (col < grid[0].length - 1) {
-            neighbors.add(grid[row][col + 1]);
-        }
-
-        return neighbors;
-    }
-
     @Override
     public boolean solve(Maze maze) {
         Cell start = maze.start();
@@ -80,20 +48,20 @@ public class AStarSolverStrategy implements SolverStrategy {
         Set<Cell> closedList = new HashSet<>();
 
         openList.add(new Node(start, null, 0, heuristic(start, end)));
-        visitedCellsCount = 0;
-        passagesCount = countPassages(maze.grid());
+        int visitedCellsCount = 0;
+        int passagesCount = countPassages(maze.grid());
 
         while (!openList.isEmpty()) {
             Node current = openList.poll();
             if (current.cell.equals(end)) {
                 markPath(current);
-                updateMazeStats(maze);
+                SolverGeneralFunctionality.updateMazeStats(maze, visitedCellsCount, passagesCount, optimalPathLength);
                 return true;
             }
 
             closedList.add(current.cell);
 
-            for (Cell neighbor : getNeighbors(current.cell, maze.grid())) {
+            for (Cell neighbor : SolverGeneralFunctionality.getNeighbors(current.cell, maze.grid())) {
                 if (closedList.contains(neighbor) || neighbor.type() != CellType.PASSAGE) {
                     continue;
                 }
@@ -110,7 +78,7 @@ public class AStarSolverStrategy implements SolverStrategy {
                 visitedCellsCount++;
             }
         }
-        updateMazeStats(maze);
+        SolverGeneralFunctionality.updateMazeStats(maze, visitedCellsCount, passagesCount, optimalPathLength);
         return false;
     }
 

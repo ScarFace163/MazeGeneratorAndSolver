@@ -39,7 +39,7 @@ public class OutputService {
     public void printMazeForChooseCell(Maze maze) {
         Cell[][] grid = maze.grid();
         print("  ");
-        for (int i = 0; i < grid.length; i++) {
+        for (int i = 0; i < maze.width(); i++) {
             print(i < 10 ? i + " " : String.valueOf(i));
         }
         print("\n");
