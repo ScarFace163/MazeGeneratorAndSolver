@@ -36,6 +36,4 @@ public class SolverGeneralFunctionality {
         return neighbors;
     }
 
-    private SolverGeneralFunctionality() {
-    }
 }
