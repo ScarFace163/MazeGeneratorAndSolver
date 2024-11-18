@@ -37,14 +37,15 @@ public class OutputService {
 
     @SuppressWarnings("checkstyle:MagicNumber")
     public void printMazeForChooseCell(Maze maze) {
+        final int firstTwoDigitNumber = 10;
         Cell[][] grid = maze.grid();
         print("  ");
         for (int i = 0; i < maze.width(); i++) {
-            print(i < 10 ? i + " " : String.valueOf(i));
+            print(i < firstTwoDigitNumber ? i + " " : String.valueOf(i));
         }
         print("\n");
         for (int i = 0; i < grid.length; i++) {
-            print(i < 10 ? i + " " : String.valueOf(i));
+            print(i < firstTwoDigitNumber ? i + " " : String.valueOf(i));
             for (Cell cell : grid[i]) {
                 switch (cell.type()) {
                     case WALL -> print("██");

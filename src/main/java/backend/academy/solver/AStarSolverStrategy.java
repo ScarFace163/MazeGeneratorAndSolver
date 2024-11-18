@@ -12,7 +12,7 @@ import java.util.Set;
 @SuppressFBWarnings(value = {"CNC_COLLECTION_NAMING_CONFUSION",
     "PSC_PRESIZE_COLLECTIONS", "EQ_COMPARETO_USE_OBJECT_EQUALS"})
 public class AStarSolverStrategy implements SolverStrategy {
-    int optimalPathLength;
+    private int optimalPathLength;
 
     private int countPassages(Cell[][] grid) {
         int count = 0;
@@ -66,10 +66,10 @@ public class AStarSolverStrategy implements SolverStrategy {
                     continue;
                 }
 
-                int tentativeG = current.g + 1;
+                int tentativeG = current.costFromStart + 1;
                 Node neighborNode = new Node(neighbor, current, tentativeG, heuristic(neighbor, end));
 
-                if (openList.contains(neighborNode) && tentativeG >= neighborNode.g) {
+                if (openList.contains(neighborNode) && tentativeG >= neighborNode.costFromStart) {
                     continue;
                 }
 
@@ -85,18 +85,18 @@ public class AStarSolverStrategy implements SolverStrategy {
     private static class Node implements Comparable<Node> {
         Cell cell;
         Node parent;
-        int g; // Cost from start to this node
-        int h; // Heuristic cost to the end
+        int costFromStart;
+        int heuristicCost;
 
         Node(Cell cell, Node parent, int g, int h) {
             this.cell = cell;
             this.parent = parent;
-            this.g = g;
-            this.h = h;
+            this.costFromStart = g;
+            this.heuristicCost = h;
         }
 
         int getF() {
-            return g + h;
+            return costFromStart + heuristicCost;
         }
 
         @Override

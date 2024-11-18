@@ -10,8 +10,8 @@ import java.util.Scanner;
 
 @SuppressFBWarnings(value = {"PREDICTABLE_RANDOM", "CLI_CONSTANT_LIST_INDEX"})
 public class InputService {
-    Scanner sc;
-    Random random;
+    private final Scanner sc;
+    private final Random random;
 
     public GeneratorStrategyType inputGenerateStrategyType() {
         String input = sc.nextLine();

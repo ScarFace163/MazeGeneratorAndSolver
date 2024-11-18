@@ -11,9 +11,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 @SuppressFBWarnings(value = {"CLI_CONSTANT_LIST_INDEX"})
 public class MainService {
-    InputService inputService;
-    OutputService outputService;
-    MazeService mazeService;
+    private final InputService inputService;
+    private final OutputService outputService;
+    private final MazeService mazeService;
 
     public void start() {
 
@@ -66,6 +66,11 @@ public class MainService {
             size = inputService.inputMazeSize();
         }
         Maze maze = generator.generate(size[0], size[1]);
+        getStartEnd(maze);
+        return maze;
+    }
+
+    private void getStartEnd(Maze maze){
         outputService.printMazeForChooseCell(maze);
         outputService.printChooseStartCell();
         int[] start = inputService.inputCell(maze);
@@ -83,9 +88,7 @@ public class MainService {
             end = inputService.inputCell(maze);
         }
         mazeService.setEndCell(maze, end);
-        return maze;
     }
-
     public MainService() {
         inputService = new InputService();
         outputService = new OutputService();
